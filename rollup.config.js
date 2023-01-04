@@ -3,6 +3,9 @@ import cjs from '@rollup/plugin-commonjs'
 
 export default {
   input: 'src/content.js',
-  output: { file: 'content.js', format: 'iife' },
-  plugins: [cjs(), nodeResolve()]
+  output: { file: 'content.js', format: 'es' },
+  plugins: [
+    cjs(),
+    nodeResolve()
+  ]
 }

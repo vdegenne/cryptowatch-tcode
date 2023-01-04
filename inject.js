@@ -12,4 +12,4 @@ function injectScript(filePath, tag) {
   node.appendChild(script);
 }
 
-injectScript(chrome.extension.getURL('content.js'), 'body');
+injectScript(chrome.runtime.getURL('content.js'), 'body');

@@ -1,19 +1,16 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "cryptowatch-tcode",
   "version": "1.0",
-  "content_scripts": [
-    {
-      "matches": [
-        "https://cryptowat.ch/charts/*",
-        "https://trade.kraken.com/charts/*"
-      ],
-      "js": [
-        "inject.js"
-      ]
-    }
-  ],
-  "web_accessible_resources": [
-    "content.js"
-  ]
+  "content_scripts": [{
+    "matches": [
+      "https://cryptowat.ch/charts/*",
+      "https://trade.kraken.com/charts/*"
+    ],
+    "js": [ "./node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js", "content.js" ]
+  }],
+  "web_accessible_resources": [{
+    "matches": [ "<all_urls>" ],
+    "resources": [ "content.js" ]
+  }]
 }

@@ -1,13 +1,18 @@
-const {Snackbar} = require('@material/mwc-snackbar')
-const clipboard = require('clipboard-copy')
-const { render, html } = require('lit-html')
+import { Snackbar } from '@material/mwc-snackbar'
+import clipboardCopy from 'clipboard-copy'
+import { html, render } from 'lit'
 
-window.addEventListener('click', e => {
+const SELECTORS = {
+  tradeRow: '[id^="row-"]'
+}
+
+document.addEventListener('click', e => {
   const tradeRow = searchTradeRow(e.target)
+  console.log(tradeRow)
   if (tradeRow) {
     const tcode = `${getUSI()}:${getTCodeValues(tradeRow)}`
     toast(tcode)
-    clipboard(tcode)
+    clipboardCopy(tcode)
   }
 })
 
@@ -17,12 +22,20 @@ function getTCodeValues (tradeRow) {
 }
 
 function searchTradeRow (element) {
-  while (element &&
-    ![...element.children].some(el => el.innerText === 'Sell' || el.innerText === 'Buy')) {
-      element = element.parentElement;
+  let node = element
+  while (node && !isTradeRow(node)) {
+    node = node.parentElement
   }
-  return element;
+  // while (element &&
+  //   ![...element.children].some(el => el.innerText === 'Sell' || el.innerText === 'Buy')) {
+  //     element = element.parentElement;
+  // }
+  return node
 }
+function isTradeRow (element) {
+  return element.getAttribute('id')?.match(/row-[0-9]+/)
+}
+
 
 function getUSI () {
   const match = window.location.pathname.match(/\/([^\/:]+):([^-]+)-(.+)$/);
@@ -39,21 +52,21 @@ function getType (tradeRow) {
 }
 
 function getPrice (tradeRow) {
-  return tradeRow.lastElementChild.innerText.trim()
+  return tradeRow.querySelector('[class^="tableColumn_price"]').textContent.trim().replace(/,/g, '')
 }
 
 function getQuantity (tradeRow) {
-  return tradeRow.lastElementChild.previousElementSibling.innerText.trim() 
+  return tradeRow.querySelector('[class^="tableColumn_qty"]').textContent.trim().replace(/,/g, '')
 }
 
 
-function toClipboard () {
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  document.execCommand("copy");
-  alert("Copied the text: " + copyText.value);
-}
+// function toClipboard () {
+//   var copyText = document.getElementById("myInput");
+//   copyText.select();
+//   copyText.setSelectionRange(0, 99999); /* For mobile devices */
+//   document.execCommand("copy");
+//   alert("Copied the text: " + copyText.value);
+// }
 
 const snackbar = new Snackbar()
 snackbar.leading = true
